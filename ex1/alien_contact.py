@@ -8,7 +8,7 @@ class ContactType(Enum):
     RADIO = "radio"
     VISUAL = "visual"
     PHYSICAL = "physical"
-    TELEPATHIC = "thelepathic"
+    TELEPATHIC = "telepathic"
 
 
 class AlienContact(BaseModel):
@@ -26,9 +26,9 @@ class AlienContact(BaseModel):
     def validate_data(self) -> "AlienContact":
         if not self.contact_id.startswith("AC"):
             raise ValueError("contact_id needs to start with 'AC'")
-        elif self.contact_type.value == "physical" and not self.is_verified:
+        elif self.contact_type is ContactType.PHYSICAL and not self.is_verified:
             raise ValueError("Physical contact reports must be verified")
-        elif (self.contact_type.value == "telepathic"
+        elif (self.contact_type is ContactType.TELEPATHIC
               and self.witness_count < 3):
             raise ValueError(
                 "Telepathic contact requires at least 3 witnesses"
@@ -43,7 +43,7 @@ class AlienContact(BaseModel):
 
 def display_alien_contact(alien_contact: AlienContact) -> None:
     print(f"ID: {alien_contact.contact_id}")
-    print(f"Type: {alien_contact.contact_type}")
+    print(f"Type: {alien_contact.contact_type.value}")
     print(f"Location: {alien_contact.location}")
     print(f"Signal: {alien_contact.signal_strength}/10")
     print(f"Witnesses: {alien_contact.witness_count}")
@@ -51,19 +51,20 @@ def display_alien_contact(alien_contact: AlienContact) -> None:
         print(f"Notes: {alien_contact.message_received}")
     else:
         print()
-    print("================================")
+    print("===================================")
 
 
 if __name__ == "__main__":
     valid_contact = AlienContact(
         contact_id="AC_2024_001",
-        type=ContactType.RADIO,
+        contact_type=ContactType.RADIO,
         location="Area 51, Nevada",
         signal_strength=8.5,
-        duration_minutes=92.3,
+        duration_minutes=92,
         message_received="Greetings from Zeta Reticuli",
         timestamp=datetime(2026, 8, 1),
-        is_verified=True
+        is_verified=True,
+        witness_count=6
     )
     valid_contact.validate_data()
     print("Space alien_contact data validation")
@@ -71,17 +72,19 @@ if __name__ == "__main__":
     display_alien_contact(valid_contact)
     try:
         unvalid_contact = AlienContact(
-                contact_id="B_2024_001",
-                type=ContactType.PHYSICAL,
+                contact_id="AC_2024_001",
+                contact_type=ContactType.TELEPATHIC,
                 location="Desert, Arakis",
                 signal_strength=8.5,
                 duration_minutes=1000,
                 message_received="Greetings from Paul",
-                timestamp=datetime(2026, 8, 1)
+                timestamp=datetime(2026, 8, 1),
+                witness_count=2
             )
-        unvalid_contact.validate_data()
-    except ValueError as e:
+    except ValidationError as e:
         print("Expected validation error:")
         for error in e.errors():
-            variable_name = error["loc"][0]
-            print(f"{variable_name}: {error['msg']}")
+            if error["loc"]:
+                print(f"{error['loc'][0]}: {error['msg']}")
+            else:
+                print(f"{error['msg']}")
