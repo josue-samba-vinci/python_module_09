@@ -56,3 +56,14 @@ class SpaceMission(BaseModel):
                 "need 50% experienced crew (5+ years)")
 
 
+def display_space_mission(space_mission: SpaceMission) -> None:
+    print(f"Mission: {space_mission.mission_name}")
+    print(f"ID: {space_mission.mission_id}")
+    print(f"Destination: {space_mission.destination}")
+    print(f"Duration: {space_mission.duration_days} days")
+    print(f"Budget: ${space_mission.budget_millions}M")
+    print(f"Crew size: {space_mission.crew.count()}")
+    for member in space_mission.crew:
+        print(f"- {member.name} ({member.rank.value}) - "
+              f"{member.specialization}")
+    print("===================================")
