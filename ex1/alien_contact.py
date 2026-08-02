@@ -26,7 +26,8 @@ class AlienContact(BaseModel):
     def validate_data(self) -> "AlienContact":
         if not self.contact_id.startswith("AC"):
             raise ValueError("contact_id needs to start with 'AC'")
-        elif self.contact_type is ContactType.PHYSICAL and not self.is_verified:
+        elif (self.contact_type is ContactType.PHYSICAL
+              and not self.is_verified):
             raise ValueError("Physical contact reports must be verified")
         elif (self.contact_type is ContactType.TELEPATHIC
               and self.witness_count < 3):
@@ -66,7 +67,6 @@ if __name__ == "__main__":
         is_verified=True,
         witness_count=6
     )
-    valid_contact.validate_data()
     print("Space alien_contact data validation")
     print("===================================")
     display_alien_contact(valid_contact)

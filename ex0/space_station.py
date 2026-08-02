@@ -45,7 +45,8 @@ if __name__ == "__main__":
     display_station(valid_space_station)
     try:
         invalid_space_station = Space_station(
-            name="International Space Station of the state of Arakis,"
+            station_id="IAS006",
+            name="International Space Station of the state of Arakis, "
             "realm of the fremens",
             crew_size=10,
             power_level=110,
