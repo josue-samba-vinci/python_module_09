@@ -31,3 +31,28 @@ class SpaceMission(BaseModel):
     crew: list[CrewMember] = Field(min_length=1, max_length=12)
     mission_status: str = "planned"
     budget_millions: float = Field(ge=1, le=10000)
+
+    @model_validator(mode='after')
+    def mission_validation(self) -> "SpaceMission":
+        valid_crew = False
+        length_crew = 0
+        valid_experiment = 0
+        for member in self.crew:
+            length_crew + 1
+            if member.rank is Rank.COMMANDER or Rank.CAPTAIN:
+                valid_crew = True
+            if member.years_experience > 4:
+                valid_experiment + 1
+            if not member.is_active:
+                raise ValueError("All crew members must be active")
+        if not self.mission_id.startswith("M"):
+            raise ValueError("Mission ID must start with 'M'")
+        if not valid_crew:
+            raise ValueError("Must have at least one Commander or Captain")
+        if (self.duration_days > 365
+           and length_crew/2 > valid_experiment):
+            raise ValueError(
+                "Long missions (> 365 days) "
+                "need 50% experienced crew (5+ years)")
+
+
