@@ -40,8 +40,8 @@ if __name__ == "__main__":
         oxygen_level=92.3,
         last_maintenance=datetime(2026, 8, 1)
     )
-    print("Space station data validation")
-    print("===================================")
+    print("Space Station Data Validation")
+    print("================================")
     display_station(valid_space_station)
     try:
         invalid_space_station = Space_station(

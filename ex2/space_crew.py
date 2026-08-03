@@ -55,6 +55,7 @@ class SpaceMission(BaseModel):
 
 
 def display_space_mission(space_mission: SpaceMission) -> None:
+    print("Valid mission created:")
     print(f"Mission: {space_mission.mission_name}")
     print(f"ID: {space_mission.mission_id}")
     print(f"Destination: {space_mission.destination}")
@@ -119,9 +120,9 @@ if __name__ == "__main__":
             mission_name="Saturn Colony Establishment",
             destination="Saturn",
             launch_date=datetime(2026, 8, 1),
-            duration_days=1500000,
+            duration_days=3000,
             crew=[alice, john],
-            budget_millions=10000000000000
+            budget_millions=100
             )
     except ValidationError as e:
         print("Expected validation error:")
@@ -129,4 +130,4 @@ if __name__ == "__main__":
             if error["loc"]:
                 print(f"{error['loc'][0]}: {error['msg']}")
             else:
-                print(f"{error['msg']}")
+                print(f"{error['ctx']['error']}")

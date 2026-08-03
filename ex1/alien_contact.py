@@ -43,10 +43,12 @@ class AlienContact(BaseModel):
 
 
 def display_alien_contact(alien_contact: AlienContact) -> None:
+    print("Valid contact report:")
     print(f"ID: {alien_contact.contact_id}")
     print(f"Type: {alien_contact.contact_type.value}")
     print(f"Location: {alien_contact.location}")
     print(f"Signal: {alien_contact.signal_strength}/10")
+    print(f"Duration: {alien_contact.duration_minutes} minutes")
     print(f"Witnesses: {alien_contact.witness_count}")
     if alien_contact.message_received is not None:
         print(f"Notes: {alien_contact.message_received}")
@@ -61,13 +63,13 @@ if __name__ == "__main__":
         contact_type=ContactType.RADIO,
         location="Area 51, Nevada",
         signal_strength=8.5,
-        duration_minutes=92,
+        duration_minutes=45,
         message_received="Greetings from Zeta Reticuli",
         timestamp=datetime(2026, 8, 1),
         is_verified=True,
         witness_count=6
     )
-    print("Space alien_contact data validation")
+    print("Alien Contact Log Validation")
     print("===================================")
     display_alien_contact(valid_contact)
     try:
@@ -87,4 +89,4 @@ if __name__ == "__main__":
             if error["loc"]:
                 print(f"{error['loc'][0]}: {error['msg']}")
             else:
-                print(f"{error['msg']}")
+                print(f"{error['ctx']['error']}")
